@@ -1,3 +1,2 @@
-const text:string = "foo";
-
-
+//const text: string = "foo";
+export {};
