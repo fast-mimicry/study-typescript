@@ -19,7 +19,7 @@ const foo = (value: any) => {
 //１、ユーザー定義型の用法
 /************************** */
 const isUserA = (user: UserA | UserB): user is UserA => {
-    return user.lang === "ja"
+    return user.lang === "ja"       //戻り値がtrueの場合、「is xxx」で指定した型が適用される
 };
 const isUserB = (user: UserA | UserB): user is UserB => {
     return user.lang === "en"
