@@ -1,0 +1,89 @@
+import { NextPage } from "next";
+import { useState } from "react";
+
+//studyts26
+
+type Todo = {
+    id: number;
+    label: string;
+    isDone: boolean;
+};
+const TODO: Todo[] = [
+    {id: Math.random(), label: "TODO1", isDone: false},
+    {id: Math.random(), label: "TODO2", isDone: true},
+    {id: Math.random(), label: "TODO3", isDone: false},
+    {id: Math.random(), label: "TODO4", isDone: false},
+];
+
+
+const Todo: NextPage = () => {
+    const [text, setText] = useState("");
+    const [todos, setTodos] = useState([]);
+    
+    //error: パラメーター 'e' の型は暗黙的に 'any' になります。
+    //・引数eを定義する必要がある -> toggleのトリが(onchange)をコードジャンプして定義する
+    //
+    const toggle = e => {
+        setTodos(prevTodos => {
+            return prevTodos.map(todo => {
+
+                console.log({todo: todo, log: e.target.value});
+
+                if(todo.id === Number(e.target.value)){
+                    return { ...todo, isDone: !todo.isDone };
+                }
+                return todo;
+            })
+        })
+    };
+
+    const handleChangeText = e => {
+        setText(e.target.value);
+    };
+
+    const handleAdd = () => {
+
+        setTodos(prevTodos => {
+            return [
+                ...prevTodos,
+                {
+                    id: Math.random,
+                    label: text,
+                    isDone: false
+                }
+            ]
+        });
+        setText("");
+    };
+
+    console.log(text);
+
+    return (
+        <div className="w-96 mx-auto p-20">
+            <h1 className="text-xl font-bold">Todo</h1>
+            <div className="flex gap-x-2">
+                <input type="text" value={text} onChange={handleChangeText} className="border border-black" />
+                <button className="border borderblack shrink-0" onClick={handleAdd} >追加</button>
+            </div>
+            <ul className="mt-4 space-y-2">
+            {todos.map(todo => {
+                return (
+                    <li key={todo.id}>
+                        <label className="flex items-center gap-x-2">
+                            <input 
+                                type="checkbox" 
+                                checked={todo.isDone} 
+                                onChange={toggle} 
+                                value={todo.id} 
+                            />
+                            <span>{todo.label}</span>
+                        </label>
+                    </li>
+                );
+            })}
+            </ul>
+        </div>
+    );
+};
+
+export default Todo;
