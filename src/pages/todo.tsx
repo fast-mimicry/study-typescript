@@ -1,5 +1,5 @@
 import { NextPage } from "next";
-import { ChangeEventHandler, MouseEventHandler, useState } from "react";
+import { ChangeEventHandler, FC, MouseEventHandler, useState, VFC } from "react";
 
 //studyts26
 
@@ -14,7 +14,6 @@ const TODO: Todo[] = [
     {id: Math.random(), label: "TODO3", isDone: false},
     {id: Math.random(), label: "TODO4", isDone: false},
 ];
-
 
 const Todo: NextPage = () => {
     const [text, setText] = useState("");
@@ -73,20 +72,36 @@ const Todo: NextPage = () => {
             {todos.map(todo => {
                 return (
                     <li key={todo.id}>
-                        <label className="flex items-center gap-x-2">
-                            <input 
-                                type="checkbox" 
-                                checked={todo.isDone} 
-                                onChange={toggle} 
-                                value={todo.id} 
-                            />
-                            <span>{todo.label}</span>
-                        </label>
+                        <ListItem todo={todo} toggle={toggle} />
                     </li>
                 );
             })}
             </ul>
         </div>
+    );
+};
+
+type ListItemProps = {
+    todo: Todo;
+    toggle: ChangeEventHandler<HTMLInputElement>;
+  };
+
+//React18以降はVFC,FCは非推奨です
+//FCはESLintでエラーとならないため、ひとまずFCで記載する
+/**
+ * TodoList表示用の関数です
+ */
+const ListItem: FC<ListItemProps> = ({ todo, toggle }) => {
+    return (
+        <label className="flex items-center gap-x-2">
+        <input 
+            type="checkbox" 
+            checked={todo.isDone} 
+            onChange={toggle} 
+            value={todo.id} 
+        />
+        <span>{todo.label}</span>
+    </label>
     );
 };
 
