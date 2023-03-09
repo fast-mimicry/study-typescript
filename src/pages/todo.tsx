@@ -1,5 +1,5 @@
 import { NextPage } from "next";
-import { useState } from "react";
+import { ChangeEventHandler, MouseEventHandler, useState } from "react";
 
 //studyts26
 
@@ -18,12 +18,12 @@ const TODO: Todo[] = [
 
 const Todo: NextPage = () => {
     const [text, setText] = useState("");
-    const [todos, setTodos] = useState([]);
+    const [todos, setTodos] = useState<Todo[]>([]); //関数に型をつける場合、Genericsを使う
     
     //error: パラメーター 'e' の型は暗黙的に 'any' になります。
     //・引数eを定義する必要がある -> toggleのトリが(onchange)をコードジャンプして定義する
     //
-    const toggle = e => {
+    const toggle:ChangeEventHandler<HTMLInputElement> = e => {
         setTodos(prevTodos => {
             return prevTodos.map(todo => {
 
@@ -37,17 +37,18 @@ const Todo: NextPage = () => {
         })
     };
 
-    const handleChangeText = e => {
+    //ToDo入力テキストのonChangeハンドラーです
+    const handleChangeText:ChangeEventHandler<HTMLInputElement> = e => {
         setText(e.target.value);
     };
 
-    const handleAdd = () => {
-
+    //「追加」ボタンのonClickハンドラーです
+    const handleAdd:MouseEventHandler<HTMLButtonElement> = () => {
         setTodos(prevTodos => {
             return [
                 ...prevTodos,
                 {
-                    id: Math.random,
+                    id: Math.random(),
                     label: text,
                     isDone: false
                 }
@@ -56,13 +57,16 @@ const Todo: NextPage = () => {
         setText("");
     };
 
-    console.log(text);
-
     return (
         <div className="w-96 mx-auto p-20">
             <h1 className="text-xl font-bold">Todo</h1>
             <div className="flex gap-x-2">
-                <input type="text" value={text} onChange={handleChangeText} className="border border-black" />
+                <input 
+                    type="text" 
+                    value={text} 
+                    onChange={handleChangeText} 
+                    className="border border-black" 
+                />
                 <button className="border borderblack shrink-0" onClick={handleAdd} >追加</button>
             </div>
             <ul className="mt-4 space-y-2">
